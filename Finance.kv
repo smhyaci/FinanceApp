@@ -1,9 +1,40 @@
 #:kivy 2.1.0
+# TODO get ride of magic numbers from panel definition
+# TODO find way to set margins for entry panel class
+# TODO should eventually go into a kivy file for entry panel class
 
 <TransactionEntryPanel>:
-    canvas:
-        Rectangle:
-            pos: self.center_x + int(self.width / 5), 0
-            size: int(self.width/3) - 10, self.height
+        
 
+    BoxLayout:
+        orientation: "vertical"
+        size: 1/4 * root.width,root.height
+        pos: 3/4 * root.width, 0
+        padding: 20
+        spacing: 80
+
+        # TODO change hint_text to a label that appears above the text_input
+        # TODO set it up so text changes based on if charge or deposit 
+        TextInput:
+            hint_text: "Transaction Date"
+            halign: "center"
+            multinline: False
+
+        TextInput:
+            hint_text: "Transaction Type"
+            halign: "center"
+            multinline: False
+
+        TextInput:
+            hint_text: "Transaction Amount"
+            halign: "center"
+            multinline: False
+
+        TextInput:
+            hint_text: "Transaction Description"
+            halign: "center"
+            multinline: True
+
+        Button:
+            text: "press me"
 
