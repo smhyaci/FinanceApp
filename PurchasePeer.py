@@ -1,5 +1,5 @@
 from kivy.uix.floatlayout import FloatLayout
 
 
-class DataEntryPanel(FloatLayout):
+class PurchasePeer(FloatLayout):
     pass

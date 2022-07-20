@@ -1,0 +1,19 @@
+#:kivy 2.1.0
+
+#:include GraphPeer.kv
+#:include DataEntryPeer.kv
+
+<PurchasePeer>:
+
+    BoxLayout:
+        orientation: "horizontal"
+        size: root.size
+        spacing: 25
+        padding: 25
+
+        #Backdrop of the graph section of app
+        GraphPeer:
+
+        #Backdrop of the information entry section of app
+        DataEntryPeer:
+            size_hint_x: 0.4

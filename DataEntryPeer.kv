@@ -1,0 +1,61 @@
+#:kivy 2.1.0
+
+<DataEntryPeer>:
+
+    #Backdrop of the data entry section of app
+    #TODO: create a scroll view so if info can't push widgets off screen
+    MDCard:
+        elevation: 5
+        
+        #TODO add a border out group of fields 
+        GridLayout:
+            cols: 1
+            padding: 25
+            spacing: 25
+            pos_hint: {"center_y": 0.5}
+
+            Image:
+                source: "images/light_theme_logo.png"
+                
+            MDTextField:
+                hint_text: "Date"
+                icon_right: "calendar-today"
+                icon_right_color: app.theme_cls.primary_dark
+                mode: "rectangle"
+                
+            MDTextField:
+                hint_text: "Category"
+                icon_right: "arrow-down-drop-circle-outline"
+                icon_right_color: app.theme_cls.primary_dark
+                multiline: True
+                mode: "rectangle"
+            
+            MDTextField:
+                hint_text: "Amount"
+                icon_right: "cash"
+                icon_right_color: app.theme_cls.primary_dark
+                mode: "rectangle"
+                required: True
+
+            MDTextField:
+                hint_text: "Description"
+                icon_right: "comment-text-outline"
+                icon_right_color: app.theme_cls.primary_dark
+                multiline: True
+                mode: "rectangle"
+
+            #handles centering the submit bttn
+            AnchorLayout:
+                anchor_x: "center"
+                anchor_y: "top"
+                
+                MDFillRoundFlatButton:
+                    pos_hint: {"center_x": 0.5}
+                    md_bg_color: app.theme_cls.primary_dark
+                    text: "Submit"
+
+
+            
+
+
+        
