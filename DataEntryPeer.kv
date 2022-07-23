@@ -20,27 +20,30 @@
             MDTextField:
                 hint_text: "Date"
                 icon_right: "calendar-today"
-                icon_right_color: app.theme_cls.primary_dark
+                icon_right_color: app.theme_cls.primary_light
                 mode: "rectangle"
                 
             MDTextField:
                 hint_text: "Category"
                 icon_right: "arrow-down-drop-circle-outline"
-                icon_right_color: app.theme_cls.primary_dark
+                icon_right_color: app.theme_cls.primary_light
                 multiline: True
                 mode: "rectangle"
             
             MDTextField:
+                id: amount_field
                 hint_text: "Amount"
                 icon_right: "cash"
-                icon_right_color: app.theme_cls.primary_dark
+                icon_right_color: app.theme_cls.primary_light
                 mode: "rectangle"
                 required: True
+                helper_text_mode: "persistent"
+                on_text: root.is_valid_amount(self.text)
 
             MDTextField:
                 hint_text: "Description"
                 icon_right: "comment-text-outline"
-                icon_right_color: app.theme_cls.primary_dark
+                icon_right_color: app.theme_cls.primary_light
                 multiline: True
                 mode: "rectangle"
 
