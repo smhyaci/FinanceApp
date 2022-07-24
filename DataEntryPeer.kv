@@ -4,7 +4,7 @@
 
     #Backdrop of the data entry section of app
     #TODO: create a scroll view so if info can't push widgets off screen
-    MDCard:
+    MD3Card:
         elevation: 5
         
         #TODO add a border out group of fields 
@@ -17,19 +17,30 @@
             Image:
                 source: "images/light_theme_logo.png"
                 
+            #Date Field    
             MDTextField:
-                hint_text: "Date"
+                id: date_field
+                hint_text: "MM/DD/YYYY"
                 icon_right: "calendar-today"
                 icon_right_color: app.theme_cls.primary_light
                 mode: "rectangle"
+                helper_text: "Defaults to today if left blank"
+                helper_text_mode: "persistent"
+                on_text: root.is_valid_date_format(self.text)
                 
+            #Category Field
             MDTextField:
+                id: category_field
                 hint_text: "Category"
                 icon_right: "arrow-down-drop-circle-outline"
                 icon_right_color: app.theme_cls.primary_light
                 multiline: True
+                helper_text: "Use #<category name>"
+                helper_text_mode: "persistent"
                 mode: "rectangle"
+                on_text: root.is_valid_category_format(self.text)
             
+            #Amount Field
             MDTextField:
                 id: amount_field
                 hint_text: "Amount"
@@ -40,22 +51,40 @@
                 helper_text_mode: "persistent"
                 on_text: root.is_valid_amount(self.text)
 
+            #Description Field
             MDTextField:
                 hint_text: "Description"
                 icon_right: "comment-text-outline"
                 icon_right_color: app.theme_cls.primary_light
                 multiline: True
                 mode: "rectangle"
+                helper_text:"*Optional"
+                helper_text_mode: "persistent"
+
+            #Price or Charge Field
+            MDTextField:
+                id: transaction_field
+                hint_text: "Charge/Deposit"
+                icon_right: "arrow-down-drop-circle-outline"
+                icon_right_color: app.theme_cls.primary_light
+                mode: "rectangle"
+                required: True
+                helper_text:"Currency in USD"
+                helper_text_mode: "persistent"
+                on_text: root.is_valid_transaction_type(self.text)
+
 
             #handles centering the submit bttn
             AnchorLayout:
                 anchor_x: "center"
                 anchor_y: "top"
                 
+                #Submit Button
                 MDFillRoundFlatButton:
                     pos_hint: {"center_x": 0.5}
                     md_bg_color: app.theme_cls.primary_dark
                     text: "Submit"
+                    on_press: root.test()
 
 
             

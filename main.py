@@ -1,4 +1,8 @@
 # TODO: put all .kv files into a folder or package and access it that way
+#Setting app to start in with screen maximized
+from kivy.config import Config
+Config.set('graphics', 'window_state', 'maximized')
+
 from kivymd.app import MDApp
 from PurchasePeer import PurchasePeer
 
