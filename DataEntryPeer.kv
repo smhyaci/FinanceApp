@@ -48,18 +48,18 @@
                 icon_right_color: app.theme_cls.primary_light
                 mode: "rectangle"
                 required: True
+                helper_text:"Currency in USD"
                 helper_text_mode: "persistent"
                 on_text: root.is_valid_amount(self.text)
 
             #Description Field
             MDTextField:
+                id: description_field
                 hint_text: "Description"
                 icon_right: "comment-text-outline"
                 icon_right_color: app.theme_cls.primary_light
                 multiline: True
                 mode: "rectangle"
-                helper_text:"*Optional"
-                helper_text_mode: "persistent"
 
             #Price or Charge Field
             MDTextField:
@@ -69,7 +69,6 @@
                 icon_right_color: app.theme_cls.primary_light
                 mode: "rectangle"
                 required: True
-                helper_text:"Currency in USD"
                 helper_text_mode: "persistent"
                 on_text: root.is_valid_transaction_type(self.text)
 
@@ -84,7 +83,7 @@
                     pos_hint: {"center_x": 0.5}
                     md_bg_color: app.theme_cls.primary_dark
                     text: "Submit"
-                    on_press: root.test()
+                    on_press: root.submit_new_transaction()
 
 
             

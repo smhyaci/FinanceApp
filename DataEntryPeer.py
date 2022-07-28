@@ -1,9 +1,12 @@
 from datetime import datetime
+from webbrowser import get
 from kivymd.uix.card import MDCard
 from kivymd.uix.segmentedcontrol.segmentedcontrol  import MDSegmentedControl, MDSegmentedControlItem
 from kivymd.uix.behaviors import RectangularElevationBehavior
 import re
 import datetime
+import mysql.connector
+import os
 
 
 class MD3Card(MDCard, RectangularElevationBehavior):
@@ -13,15 +16,14 @@ class MD3Card(MDCard, RectangularElevationBehavior):
 class DataEntryPeer(MDCard, RectangularElevationBehavior):
     def is_valid_date_format(self, date):
         try:
-            datetime.datetime.strptime(date, '%d/%m/%Y')
+            datetime.datetime.strptime(date.strip(), '%m/%d/%Y')
             self.ids.date_field.helper_text = "Valid date"
         except ValueError:
-            self.ids.date_field.helper_text = "Invalid MM/DD/YYYY format"
+            self.ids.date_field.helper_text = "If blank/invalid defaults to today"
             
     def is_valid_category_format(self, category):
         valid_category_format = re.compile(r'#\w+\b')
         user_input_results = valid_category_format.findall(category)
-        print(user_input_results)
         if user_input_results is None:
             self.ids.category_field.helper_text = "Invalid category format"
         elif len(user_input_results) == 0:
@@ -31,21 +33,115 @@ class DataEntryPeer(MDCard, RectangularElevationBehavior):
             
     def is_valid_amount(self, amount):
         valid_price_format = re.compile(r'\d*\.?\d{0,2}?')
-        user_input_results = valid_price_format.fullmatch(amount)
-        print(user_input_results)
+        user_input_results = valid_price_format.fullmatch(amount.strip())
         if user_input_results is None or not user_input_results.string:
             self.ids.amount_field.helper_text = "Invalid amount"
         else:
             self.ids.amount_field.helper_text = "Valid Amount"
         
     def is_valid_transaction_type(self, type):
-        type = type.lower()
+        type = type.strip().lower()
         if type == "charge":
             self.ids.transaction_field.helper_text = "Valid Transaction Type"
         elif type == "deposit":
             self.ids.transaction_field.helper_text = "Valid Transaction Type"
         else:
-            self.ids.transaction_field.helper_text = "options: charge or deposit"    
+            self.ids.transaction_field.helper_text = "options: charge or deposit"            
         
-    def test(self):
-        print("Functioning Button")
+    def submit_new_transaction(self):
+        db = mysql.connector.connect(
+            host = "localhost",
+            user = os.environ.get("DB_USER"),
+            passwd = os.environ.get("DB_PASS"),
+            database = "purchasepeer_db"
+        )
+        
+        db_cursor = db.cursor()
+        
+        #initialize purchasepeer_db
+        db_cursor.execute("""CREATE DATABASE IF NOT EXISTS purchasepeer_db""")
+
+        #creates transaction table
+        db_cursor.execute("""CREATE TABLE IF NOT EXISTS transactions(
+            id INT(255) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            date DATE,
+            category VARCHAR(255),
+            amount DOUBLE(12,2) NOT NULL,
+            description VARCHAR(255),
+            type VARCHAR(255) NOT NULL
+            )
+            """)
+        
+        #add transaction to transactions table in purchasepeer_db
+        insert_statement = (
+            "INSERT INTO transactions (date, category, amount, description, type)"
+            "VALUES (%s, %s, %s, %s, %s)"
+            )
+        
+        data = (
+            datetime.datetime.strptime(self.get_date_field(),'%m/%d/%Y').strftime('%Y/%m/%d'),
+            self.get_category_field(),
+            self.get_amount_field(),
+            self.get_description_field(),
+            self.get_transaction_field()
+        )
+        
+        try:
+            #Adding transaction data to table
+            db_cursor.execute(insert_statement,data)
+            db.commit()
+            print("Sucessfully inserted transaction")
+        except:
+            #rolling back changes in case of failures
+            print("Rolling back changes")
+            db.rollback()
+
+        db.close()
+        self.clear_all_fields()
+        
+
+    def get_date_field(self):
+        if not self.ids.date_field.text.strip():
+            return datetime.datetime.now().strftime("%m/%d/%Y")
+        else:
+            return self.ids.date_field.text.strip()
+    
+    def get_category_field(self):
+        return self.ids.category_field.text.strip()
+    
+    #TODO: make amount negative if transaction_field == charge
+    def get_amount_field(self):
+        if self.get_transaction_field() == "charge":
+            return "-" + self.ids.amount_field.text.strip()
+        else:
+            return self.ids.amount_field.text.strip()
+        
+    def get_description_field(self):
+        return self.ids.description_field.text.strip()
+    
+    def get_transaction_field(self):
+        return self.ids.transaction_field.text.strip()
+    
+    def clear_date_field(self):
+        self.ids.date_field.text = ""
+    
+    def clear_category_field(self):
+        self.ids.category_field.text = ""
+    
+    def clear_amount_field(self):
+        self.ids.amount_field.text = ""
+    
+    def clear_transaction_field(self):
+        self.ids.transaction_field.text = ""
+        
+    def clear_description_field(self):
+        self.ids.description_field.text = ""
+        
+    def clear_all_fields(self):
+        self.clear_date_field()
+        self.clear_category_field()
+        self.clear_amount_field()
+        self.clear_description_field()
+        self.clear_transaction_field()
+        
+        
