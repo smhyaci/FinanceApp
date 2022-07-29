@@ -1,12 +1,13 @@
-from datetime import datetime
-from webbrowser import get
-from kivymd.uix.card import MDCard
-from kivymd.uix.segmentedcontrol.segmentedcontrol  import MDSegmentedControl, MDSegmentedControlItem
-from kivymd.uix.behaviors import RectangularElevationBehavior
 import re
 import datetime
 import mysql.connector
 import os
+from database.DataLayer import DataLayer
+from datetime import datetime
+from kivymd.uix.card import MDCard
+from kivymd.uix.segmentedcontrol.segmentedcontrol  import MDSegmentedControl, MDSegmentedControlItem
+from kivymd.uix.behaviors import RectangularElevationBehavior
+
 
 
 class MD3Card(MDCard, RectangularElevationBehavior):
@@ -14,6 +15,10 @@ class MD3Card(MDCard, RectangularElevationBehavior):
     pass
 
 class DataEntryPeer(MDCard, RectangularElevationBehavior):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.db_connection = DataLayer()
+    
     def is_valid_date_format(self, date):
         try:
             datetime.datetime.strptime(date.strip(), '%m/%d/%Y')
@@ -48,30 +53,7 @@ class DataEntryPeer(MDCard, RectangularElevationBehavior):
         else:
             self.ids.transaction_field.helper_text = "options: charge or deposit"            
         
-    def submit_new_transaction(self):
-        db = mysql.connector.connect(
-            host = "localhost",
-            user = os.environ.get("DB_USER"),
-            passwd = os.environ.get("DB_PASS"),
-            database = "purchasepeer_db"
-        )
-        
-        db_cursor = db.cursor()
-        
-        #initialize purchasepeer_db
-        db_cursor.execute("""CREATE DATABASE IF NOT EXISTS purchasepeer_db""")
-
-        #creates transaction table
-        db_cursor.execute("""CREATE TABLE IF NOT EXISTS transactions(
-            id INT(255) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            date DATE,
-            category VARCHAR(255),
-            amount DOUBLE(12,2) NOT NULL,
-            description VARCHAR(255),
-            type VARCHAR(255) NOT NULL
-            )
-            """)
-        
+    def submit_new_transaction(self):     
         #add transaction to transactions table in purchasepeer_db
         insert_statement = (
             "INSERT INTO transactions (date, category, amount, description, type)"
@@ -86,17 +68,8 @@ class DataEntryPeer(MDCard, RectangularElevationBehavior):
             self.get_transaction_field()
         )
         
-        try:
-            #Adding transaction data to table
-            db_cursor.execute(insert_statement,data)
-            db.commit()
-            print("Sucessfully inserted transaction")
-        except:
-            #rolling back changes in case of failures
-            print("Rolling back changes")
-            db.rollback()
-
-        db.close()
+        self.db_connection.execute(insert_statement, data)
+        
         self.clear_all_fields()
         
 
@@ -109,7 +82,6 @@ class DataEntryPeer(MDCard, RectangularElevationBehavior):
     def get_category_field(self):
         return self.ids.category_field.text.strip()
     
-    #TODO: make amount negative if transaction_field == charge
     def get_amount_field(self):
         if self.get_transaction_field() == "charge":
             return "-" + self.ids.amount_field.text.strip()
