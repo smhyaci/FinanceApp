@@ -2,7 +2,7 @@
 import mysql.connector
 import os
 
-#should be passed in constructor if component needs data from backend
+#should be used  if component needs data from backend
 class DataLayer:
     def __init__(self):
         
@@ -50,6 +50,7 @@ class DataLayer:
         
     #for debugging purposes only    
     def show_all_rows(self):
+        self.start_connection_and_cursor()
         # execute your query
         self.cursor.execute("SELECT * FROM transactions")
         

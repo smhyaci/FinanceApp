@@ -1,9 +1,6 @@
 import re
 import datetime
-import mysql.connector
-import os
 from database.DataLayer import DataLayer
-from datetime import datetime
 from kivymd.uix.card import MDCard
 from kivymd.uix.segmentedcontrol.segmentedcontrol  import MDSegmentedControl, MDSegmentedControlItem
 from kivymd.uix.behaviors import RectangularElevationBehavior
@@ -74,13 +71,14 @@ class DataEntryPeer(MDCard, RectangularElevationBehavior):
         
 
     def get_date_field(self):
+        #defaulting date to date during time of entry
         if not self.ids.date_field.text.strip():
             return datetime.datetime.now().strftime("%m/%d/%Y")
         else:
             return self.ids.date_field.text.strip()
     
     def get_category_field(self):
-        return self.ids.category_field.text.strip()
+        return self.ids.category_field.text.replace("#","").strip()
     
     def get_amount_field(self):
         if self.get_transaction_field() == "charge":
