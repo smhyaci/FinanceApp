@@ -13,11 +13,12 @@ class PurchasePeerApp(MDApp):
     def build(self):
         #set color scheme for app
         self.theme_cls.theme_style = "Light"
-        self.theme_cls.primary_palette = "Orange"
+        self.theme_cls.primary_palette = "Teal"
         return PurchasePeer()  
 
 class PurchasePeer(FloatLayout):
-    pass    
+    pass
+
     
 if __name__ == "__main__":
     PurchasePeerApp().run()

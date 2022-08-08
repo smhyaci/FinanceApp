@@ -2,7 +2,6 @@ import re
 import datetime
 from database.DataLayer import DataLayer
 from kivymd.uix.card import MDCard
-from kivymd.uix.segmentedcontrol.segmentedcontrol  import MDSegmentedControl, MDSegmentedControlItem
 from kivymd.uix.behaviors import RectangularElevationBehavior
 
 

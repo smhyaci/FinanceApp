@@ -4,8 +4,49 @@
 
     #Backdrop of the graph peer
     MD3Card:
-
         elevation: 5
-        padding: 25
-        spacing: 25
-        orientation: "vertical"
+
+        BoxLayout:
+            orientation: "vertical"
+            padding: 25
+            spacing: 25
+            
+            BoxLayout:
+                id: graph
+                size_hint_y: 0.9
+        
+            MDSegmentedControl:
+                id: filter_type
+                segment_color: app.theme_cls.primary_light
+                on_active: root.display_filter_setup()
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+                MDSegmentedControlItem:
+                    text: "Cost"
+
+                MDSegmentedControlItem:
+                    text: "Cost(Range)"
+
+                MDSegmentedControlItem:
+                    text: "Date"
+                
+                MDSegmentedControlItem:
+                    text: "Date(Range)"
+                
+                MDSegmentedControlItem:
+                    text: "Category"
+                
+                MDSegmentedControlItem:
+                    text: "Type"
+                    
+            BoxLayout:
+                id: filter_panel
+                orientation: "horizontal"
+                size_hint_y: 0.1
+                size_hint_x: 0.2
+                pos_hint: {"center_x": 0.5,}
+                spacing: 25
+
+                   
+
+        
