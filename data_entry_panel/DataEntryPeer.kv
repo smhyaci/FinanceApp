@@ -1,18 +1,24 @@
 #:kivy 2.1.0
 
 <DataEntryPeer>:
+#:set CENTER 0.5
+#:set BACKDROP_ELEVATION 5
+#:set DATA_ENTRY_PEER_PADDING 25
+#:set DATA_ENTRY_PEER_SPACING 25
+
+
 
     #Backdrop of the data entry section of app
     #TODO: create a scroll view so if info can't push widgets off screen
     MD3Card:
-        elevation: 5
+        elevation: BACKDROP_ELEVATION
         
         #TODO add a border out group of fields 
         GridLayout:
             cols: 1
-            padding: 25
-            spacing: 25
-            pos_hint: {"center_y": 0.5}
+            padding: DATA_ENTRY_PEER_PADDING
+            spacing: DATA_ENTRY_PEER_SPACING
+            pos_hint: {"center_y": CENTER}
 
             Image:
                 source: "images/light_theme_logo.png"
@@ -80,7 +86,7 @@
                 
                 #Submit Button
                 MDFillRoundFlatButton:
-                    pos_hint: {"center_x": 0.5}
+                    pos_hint: {"center_x": CENTER}
                     md_bg_color: app.theme_cls.primary_light
                     text: "Submit"
                     on_press: root.submit_new_transaction()

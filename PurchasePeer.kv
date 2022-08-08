@@ -4,17 +4,21 @@
 #:include data_entry_panel/DataEntryPeer.kv
 
 <PurchasePeer>:
+#:set PURCHASE_PEER_SPACING 15
+#:set PURCHASE_PEER_PADDING 15
+#:set GRAPH_PEER_SCREEN_RATIO 0.7
+
 
     BoxLayout:
         orientation: "horizontal"
         size: root.size
-        spacing: 15
-        padding: 15
+        spacing: PURCHASE_PEER_SPACING
+        padding: PURCHASE_PEER_PADDING
 
         #graph section of app
         GraphPeer:
-            size_hint_x: 0.7
+            size_hint_x: GRAPH_PEER_SCREEN_RATIO
 
         #information entry section of app
         DataEntryPeer:
-            size_hint_x: 0.3
+            size_hint_x: 1 - GRAPH_PEER_SCREEN_RATIO

@@ -1,25 +1,35 @@
 #:kivy 2.1.0
 
 <GraphPeer>:
+#:set CENTER 0.5
+#:set BACKDROP_ELEVATION 5
+#:set GRAPH_PEER_PADDING 25
+#:set GRAPH_PEER_SPACING 25
+#:set GRAPH_Y_SIZE 0.9
+#:set FILTER_PANEL_Y_SIZE 0.1
+#:set FILTER_PANEL_X_SIZE 0.2
+#:set FILTER_PANEL_SPACING 25
+
+
 
     #Backdrop of the graph peer
     MD3Card:
-        elevation: 5
+        elevation: BACKDROP_ELEVATION
 
         BoxLayout:
             orientation: "vertical"
-            padding: 25
-            spacing: 25
+            padding: GRAPH_PEER_PADDING
+            spacing: GRAPH_PEER_SPACING
             
             BoxLayout:
                 id: graph
-                size_hint_y: 0.9
+                size_hint_y: GRAPH_Y_SIZE
         
             MDSegmentedControl:
                 id: filter_type
                 segment_color: app.theme_cls.primary_light
                 on_active: root.display_filter_setup()
-                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                pos_hint: {"center_x": CENTER, "center_y": CENTER}
 
                 MDSegmentedControlItem:
                     text: "Cost"
@@ -42,10 +52,10 @@
             BoxLayout:
                 id: filter_panel
                 orientation: "horizontal"
-                size_hint_y: 0.1
-                size_hint_x: 0.2
-                pos_hint: {"center_x": 0.5,}
-                spacing: 25
+                size_hint_y: FILTER_PANEL_Y_SIZE
+                size_hint_x: FILTER_PANEL_X_SIZE
+                pos_hint: {"center_x": CENTER,}
+                spacing: FILTER_PANEL_SPACING
 
                    
 
