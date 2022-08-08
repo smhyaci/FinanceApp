@@ -1,5 +1,6 @@
 import re
 import datetime
+from kivymd.toast import toast
 from database.DataLayer import DataLayer
 from kivymd.uix.card import MDCard
 from kivymd.uix.behaviors import RectangularElevationBehavior
@@ -55,16 +56,18 @@ class DataEntryPeer(MDCard, RectangularElevationBehavior):
             "INSERT INTO transactions (date, category, amount, description, type)"
             "VALUES (%s, %s, %s, %s, %s)"
             )
-        
-        data = (
-            datetime.datetime.strptime(self.get_date_field(),'%m/%d/%Y').strftime('%Y/%m/%d'),
-            self.get_category_field(),
-            self.get_amount_field(),
-            self.get_description_field(),
-            self.get_transaction_field()
-        )
-        
-        self.db_connection.execute(insert_statement, data)
+        try:
+            data = (
+                datetime.datetime.strptime(self.get_date_field(),'%m/%d/%Y').strftime('%Y/%m/%d'),
+                self.get_category_field(),
+                self.get_amount_field(),
+                self.get_description_field(),
+                self.get_transaction_field()
+            )       
+            self.db_connection.execute(insert_statement, data)
+        except:
+            toast("Invalid data entry. Data not added.")
+            print("Invalid data was submitted to transaction database")
         
         self.clear_all_fields()
         

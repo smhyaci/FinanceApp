@@ -48,49 +48,50 @@ class GraphPeer(MDCard, RectangularElevationBehavior):
             active_filter = "cost"
 
         if active_filter == "cost":
-            self.filter = MDTextField(
+            filter_input = MDTextField(
                 hint_text='Filter: Amount', icon_right='cash')
-            self.filter.pos_hint = {"center_x": CENTER, }
-            self.ids.filter_panel.add_widget(self.filter)
+            filter_input.pos_hint = {"center_x": CENTER, }
+            self.ids.filter_panel.add_widget(filter_input)
             
         elif active_filter == "cost(range)":
-            self.filter_low = MDTextField(
+            filter_low = MDTextField(
                 hint_text='Filter: Amount Low', icon_right='cash')
-            self.filter_low.pos_hint = {"center_x": CENTER, }
+            filter_low.pos_hint = {"center_x": CENTER, }
             
-            self.filter_high = MDTextField(
+            filter_high = MDTextField(
                 hint_text='Filter: Amount High', icon_right='cash')
-            self.filter_high.pos_hint = {"center_x": CENTER, }
+            filter_high.pos_hint = {"center_x": CENTER, }
         
             self.ids.filter_panel.size_hint_x = FILTER_PANEL_RANGE_SIZE_X
-            self.ids.filter_panel.add_widget(self.filter_low)
-            self.ids.filter_panel.add_widget(self.filter_high)
+            self.ids.filter_panel.add_widget(filter_low)
+            self.ids.filter_panel.add_widget(filter_high)
         
         elif active_filter == "date":
-            self.filter = MDTextField(
+            filter_input = MDTextField(
                 hint_text='Filter: MM/DD/YYYY', icon_right='calendar-today')
-            self.ids.filter_panel.add_widget(self.filter)
+            self.ids.filter_panel.add_widget(filter_input)
             
         elif active_filter == "date(range)":
-            self.filter_start = MDTextField(
+            filter_start = MDTextField(
                 hint_text='Filter: Start Date', icon_right='calendar-today')
-            self.filter_start.pos_hint = {"center_x": CENTER, }
+            filter_start.pos_hint = {"center_x": CENTER, }
             
-            self.filter_end = MDTextField(
+            filter_end = MDTextField(
                 hint_text='Filter: End Date', icon_right='calendar-today')
-            self.filter_end.pos_hint = {"center_x": CENTER, }
+            filter_end.pos_hint = {"center_x": CENTER, }
             
             self.ids.filter_panel.size_hint_x = FILTER_PANEL_RANGE_SIZE_X
-            self.ids.filter_panel.add_widget(self.filter_start)
-            self.ids.filter_panel.add_widget(self.filter_end)
+            self.ids.filter_panel.add_widget(filter_start)
+            self.ids.filter_panel.add_widget(filter_end)
         
         elif active_filter == "category":
-            self.filter = MDTextField(hint_text='Filter: #<category_name>')
-            self.filter.pos_hint = {"center_x": CENTER, }
-            self.ids.filter_panel.add_widget(self.filter) 
+            filter_input = MDTextField(hint_text='Filter: #<category_name>')
+            filter_input.pos_hint = {"center_x": CENTER, }
+            self.ids.filter_panel.add_widget(filter_input) 
             
         else:
-            self.filter = MDTextField(hint_text='Filter: Charge/Deposit')
-            self.filter.pos_hint = {"center_x": CENTER, }
-            self.ids.filter_panel.add_widget(self.filter)
+            filter_input = MDTextField(hint_text='Filter: Charge/Deposit')
+            filter_input.pos_hint = {"center_x": CENTER, }
+            self.ids.filter_panel.add_widget(filter_input)
        
+    
