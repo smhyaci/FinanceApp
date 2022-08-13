@@ -20,9 +20,11 @@ class DataEntryPeer(MDCard, RectangularElevationBehavior):
         try:
             datetime.datetime.strptime(date.strip(), '%m/%d/%Y')
             self.ids.date_field.helper_text = "Valid date"
+            return True
         except ValueError:
             self.ids.date_field.helper_text = "If blank/invalid defaults to today"
-            
+            return False
+        
     def is_valid_category_format(self, category):
         valid_category_format = re.compile(r'#\w+\b')
         user_input_results = valid_category_format.findall(category)
@@ -32,14 +34,18 @@ class DataEntryPeer(MDCard, RectangularElevationBehavior):
             self.ids.category_field.helper_text = "Use #<category name>"
         else:
             self.ids.category_field.helper_text = "Valid category"
+            return True
+        return False
             
     def is_valid_amount(self, amount):
         valid_price_format = re.compile(r'\d*\.?\d{0,2}?')
         user_input_results = valid_price_format.fullmatch(amount.strip())
         if user_input_results is None or not user_input_results.string:
             self.ids.amount_field.helper_text = "Invalid amount"
+            return False
         else:
             self.ids.amount_field.helper_text = "Valid Amount"
+            return True
         
     def is_valid_transaction_type(self, type):
         type = type.strip().lower()
@@ -48,13 +54,15 @@ class DataEntryPeer(MDCard, RectangularElevationBehavior):
         elif type == "deposit":
             self.ids.transaction_field.helper_text = "Valid Transaction Type"
         else:
-            self.ids.transaction_field.helper_text = "options: charge or deposit"            
+            self.ids.transaction_field.helper_text = "options: charge or deposit" 
+            return False
+        return True           
         
     def submit_new_transaction(self):     
-        #add transaction to transactions table in purchasepeer_db
+        #adds transaction to transactions table in purchasepeer_db
         insert_statement = (
             "INSERT INTO transactions (date, category, amount, description, type)"
-            "VALUES (%s, %s, %s, %s, %s)"
+            "VALUES (?, ?, ?, ?, ?)"
             )
         try:
             data = (
@@ -65,9 +73,10 @@ class DataEntryPeer(MDCard, RectangularElevationBehavior):
                 self.get_transaction_field()
             )       
             self.db_connection.execute(insert_statement, data)
-        except:
-            toast("Invalid data entry. Data not added.")
-            print("Invalid data was submitted to transaction database")
+            toast("Transaction added!")
+        except BaseException as exception:
+            print(exception)
+            toast("Invalid data entry. Transaction not added.")
         
         self.clear_all_fields()
         
@@ -80,18 +89,26 @@ class DataEntryPeer(MDCard, RectangularElevationBehavior):
             return self.ids.date_field.text.strip()
     
     def get_category_field(self):
+        if not self.ids.category_field.text:
+            return None
         return self.ids.category_field.text.replace("#","").strip()
     
     def get_amount_field(self):
-        if self.get_transaction_field() == "charge":
+        if not self.is_valid_amount(self.ids.amount_field.text):
+            raise Exception("No amount detected")
+        elif self.get_transaction_field() == "charge":
             return "-" + self.ids.amount_field.text.strip()
         else:
             return self.ids.amount_field.text.strip()
         
     def get_description_field(self):
+        if not self.ids.description_field.text:
+            return None
         return self.ids.description_field.text.strip()
     
     def get_transaction_field(self):
+        if not self.is_valid_transaction_type(self.ids.transaction_field.text):
+            raise Exception("No transaction type detected")
         return self.ids.transaction_field.text.strip()
     
     def clear_date_field(self):

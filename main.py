@@ -17,6 +17,5 @@ class PurchasePeerApp(MDApp):
 class PurchasePeer(FloatLayout):
     pass
 
-    
 if __name__ == "__main__":
     PurchasePeerApp().run()
